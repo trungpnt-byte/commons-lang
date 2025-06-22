@@ -18,6 +18,7 @@
  */
 package org.apache.commons.lang3;
 
+import static org.apache.commons.lang3.LangAssertions.assertNullPointerException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -36,22 +37,28 @@ import java.util.function.ToIntFunction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+enum Enum64 {
+    A00, A01, A02, A03, A04, A05, A06, A07, A08, A09, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22,
+    A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, A36, A37, A38, A39, A40, A41, A42, A43, A44, A45,
+    A46, A47, A48, A49, A50, A51, A52, A53, A54, A55, A56, A57, A58, A59, A60, A61, A62, A63
+}
+
 /**
  */
-public class EnumUtilsTest extends AbstractLangTest {
+class EnumUtilsTest extends AbstractLangTest {
 
     private void assertArrayEquals(final long[] actual, final long... expected) {
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void testConstructable() {
+    void testConstructable() {
         // enforce public constructor
         new EnumUtils();
     }
 
     @Test
-    public void testGenerateBitVector() {
+    void testGenerateBitVector() {
         assertEquals(0L, EnumUtils.generateBitVector(Traffic.class, EnumSet.noneOf(Traffic.class)));
         assertEquals(1L, EnumUtils.generateBitVector(Traffic.class, EnumSet.of(Traffic.RED)));
         assertEquals(2L, EnumUtils.generateBitVector(Traffic.class, EnumSet.of(Traffic.AMBER)));
@@ -70,19 +77,19 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGenerateBitVector_longClass() {
+    void testGenerateBitVector_longClass() {
         assertThrows(IllegalArgumentException.class,
             () -> EnumUtils.generateBitVector(TooMany.class, EnumSet.of(TooMany.A1)));
     }
 
     @Test
-    public void testGenerateBitVector_longClassWithArray() {
+    void testGenerateBitVector_longClassWithArray() {
         assertThrows(IllegalArgumentException.class, () -> EnumUtils.generateBitVector(TooMany.class, TooMany.A1));
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testGenerateBitVector_nonEnumClass() {
+    void testGenerateBitVector_nonEnumClass() {
         @SuppressWarnings("rawtypes")
         final Class rawType = Object.class;
         @SuppressWarnings("rawtypes")
@@ -92,47 +99,47 @@ public class EnumUtilsTest extends AbstractLangTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testGenerateBitVector_nonEnumClassWithArray() {
+    void testGenerateBitVector_nonEnumClassWithArray() {
         @SuppressWarnings("rawtypes")
         final Class rawType = Object.class;
         assertThrows(IllegalArgumentException.class, () -> EnumUtils.generateBitVector(rawType));
     }
 
     @Test
-    public void testGenerateBitVector_nullArray() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.generateBitVector(Traffic.class, (Traffic[]) null));
+    void testGenerateBitVector_nullArray() {
+        assertNullPointerException(() -> EnumUtils.generateBitVector(Traffic.class, (Traffic[]) null));
     }
 
     @Test
-    public void testGenerateBitVector_nullArrayElement() {
+    void testGenerateBitVector_nullArrayElement() {
         assertThrows(IllegalArgumentException.class,
             () -> EnumUtils.generateBitVector(Traffic.class, Traffic.RED, null));
     }
 
     @Test
-    public void testGenerateBitVector_nullClass() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.generateBitVector(null, EnumSet.of(Traffic.RED)));
+    void testGenerateBitVector_nullClass() {
+        assertNullPointerException(() -> EnumUtils.generateBitVector(null, EnumSet.of(Traffic.RED)));
     }
 
     @Test
-    public void testGenerateBitVector_nullClassWithArray() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.generateBitVector(null, Traffic.RED));
+    void testGenerateBitVector_nullClassWithArray() {
+        assertNullPointerException(() -> EnumUtils.generateBitVector(null, Traffic.RED));
     }
 
     @Test
-    public void testGenerateBitVector_nullElement() {
+    void testGenerateBitVector_nullElement() {
         assertThrows(NullPointerException.class,
             () -> EnumUtils.generateBitVector(Traffic.class, Arrays.asList(Traffic.RED, null)));
     }
 
     @Test
-    public void testGenerateBitVector_nullIterable() {
+    void testGenerateBitVector_nullIterable() {
         assertThrows(NullPointerException.class,
             () -> EnumUtils.generateBitVector(Traffic.class, (Iterable<Traffic>) null));
     }
 
     @Test
-    public void testGenerateBitVectorFromArray() {
+    void testGenerateBitVectorFromArray() {
         assertEquals(0L, EnumUtils.generateBitVector(Traffic.class));
         assertEquals(1L, EnumUtils.generateBitVector(Traffic.class, Traffic.RED));
         assertEquals(2L, EnumUtils.generateBitVector(Traffic.class, Traffic.AMBER));
@@ -153,7 +160,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGenerateBitVectors() {
+    void testGenerateBitVectors() {
         assertArrayEquals(EnumUtils.generateBitVectors(Traffic.class, EnumSet.noneOf(Traffic.class)), 0L);
         assertArrayEquals(EnumUtils.generateBitVectors(Traffic.class, EnumSet.of(Traffic.RED)), 1L);
         assertArrayEquals(EnumUtils.generateBitVectors(Traffic.class, EnumSet.of(Traffic.AMBER)), 2L);
@@ -178,7 +185,7 @@ public class EnumUtilsTest extends AbstractLangTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testGenerateBitVectors_nonEnumClass() {
+    void testGenerateBitVectors_nonEnumClass() {
         @SuppressWarnings("rawtypes")
         final Class rawType = Object.class;
         @SuppressWarnings("rawtypes")
@@ -188,46 +195,46 @@ public class EnumUtilsTest extends AbstractLangTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testGenerateBitVectors_nonEnumClassWithArray() {
+    void testGenerateBitVectors_nonEnumClassWithArray() {
         @SuppressWarnings("rawtypes")
         final Class rawType = Object.class;
         assertThrows(IllegalArgumentException.class, () -> EnumUtils.generateBitVectors(rawType));
     }
 
     @Test
-    public void testGenerateBitVectors_nullArray() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.generateBitVectors(Traffic.class, (Traffic[]) null));
+    void testGenerateBitVectors_nullArray() {
+        assertNullPointerException(() -> EnumUtils.generateBitVectors(Traffic.class, (Traffic[]) null));
     }
 
     @Test
-    public void testGenerateBitVectors_nullArrayElement() {
+    void testGenerateBitVectors_nullArrayElement() {
         assertThrows(IllegalArgumentException.class,
             () -> EnumUtils.generateBitVectors(Traffic.class, Traffic.RED, null));
     }
 
     @Test
-    public void testGenerateBitVectors_nullClass() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.generateBitVectors(null, EnumSet.of(Traffic.RED)));
+    void testGenerateBitVectors_nullClass() {
+        assertNullPointerException(() -> EnumUtils.generateBitVectors(null, EnumSet.of(Traffic.RED)));
     }
 
     @Test
-    public void testGenerateBitVectors_nullClassWithArray() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.generateBitVectors(null, Traffic.RED));
+    void testGenerateBitVectors_nullClassWithArray() {
+        assertNullPointerException(() -> EnumUtils.generateBitVectors(null, Traffic.RED));
     }
 
     @Test
-    public void testGenerateBitVectors_nullElement() {
+    void testGenerateBitVectors_nullElement() {
         assertThrows(NullPointerException.class,
             () -> EnumUtils.generateBitVectors(Traffic.class, Arrays.asList(Traffic.RED, null)));
     }
 
     @Test
-    public void testGenerateBitVectors_nullIterable() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.generateBitVectors(null, (Iterable<Traffic>) null));
+    void testGenerateBitVectors_nullIterable() {
+        assertNullPointerException(() -> EnumUtils.generateBitVectors(null, (Iterable<Traffic>) null));
     }
 
     @Test
-    public void testGenerateBitVectorsFromArray() {
+    void testGenerateBitVectorsFromArray() {
         assertArrayEquals(EnumUtils.generateBitVectors(Traffic.class), 0L);
         assertArrayEquals(EnumUtils.generateBitVectors(Traffic.class, Traffic.RED), 1L);
         assertArrayEquals(EnumUtils.generateBitVectors(Traffic.class, Traffic.AMBER), 2L);
@@ -253,7 +260,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetEnum() {
+    void testGetEnum() {
         assertEquals(Traffic.RED, EnumUtils.getEnum(Traffic.class, "RED"));
         assertEquals(Traffic.AMBER, EnumUtils.getEnum(Traffic.class, "AMBER"));
         assertEquals(Traffic.GREEN, EnumUtils.getEnum(Traffic.class, "GREEN"));
@@ -262,7 +269,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetEnum_defaultEnum() {
+    void testGetEnum_defaultEnum() {
         assertEquals(Traffic.RED, EnumUtils.getEnum(Traffic.class, "RED", Traffic.AMBER));
         assertEquals(Traffic.AMBER, EnumUtils.getEnum(Traffic.class, "AMBER", Traffic.GREEN));
         assertEquals(Traffic.GREEN, EnumUtils.getEnum(Traffic.class, "GREEN", Traffic.RED));
@@ -280,19 +287,19 @@ public class EnumUtilsTest extends AbstractLangTest {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void testGetEnum_nonEnumClass() {
+    void testGetEnum_nonEnumClass() {
         @SuppressWarnings("rawtypes")
         final Class rawType = Object.class;
         assertNull(EnumUtils.getEnum(rawType, "rawType"));
     }
 
     @Test
-    public void testGetEnum_nullClass() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.getEnum((Class<Traffic>) null, "PURPLE"));
+    void testGetEnum_nullClass() {
+        assertNullPointerException(() -> EnumUtils.getEnum((Class<Traffic>) null, "PURPLE"));
     }
 
     @Test
-    public void testGetEnumIgnoreCase() {
+    void testGetEnumIgnoreCase() {
         assertEquals(Traffic.RED, EnumUtils.getEnumIgnoreCase(Traffic.class, "red"));
         assertEquals(Traffic.AMBER, EnumUtils.getEnumIgnoreCase(Traffic.class, "Amber"));
         assertEquals(Traffic.GREEN, EnumUtils.getEnumIgnoreCase(Traffic.class, "grEEn"));
@@ -301,7 +308,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetEnumIgnoreCase_defaultEnum() {
+    void testGetEnumIgnoreCase_defaultEnum() {
         assertEquals(Traffic.RED, EnumUtils.getEnumIgnoreCase(Traffic.class, "red", Traffic.AMBER));
         assertEquals(Traffic.AMBER, EnumUtils.getEnumIgnoreCase(Traffic.class, "Amber", Traffic.GREEN));
         assertEquals(Traffic.GREEN, EnumUtils.getEnumIgnoreCase(Traffic.class, "grEEn", Traffic.RED));
@@ -319,19 +326,19 @@ public class EnumUtilsTest extends AbstractLangTest {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void testGetEnumIgnoreCase_nonEnumClass() {
+    void testGetEnumIgnoreCase_nonEnumClass() {
         @SuppressWarnings("rawtypes")
         final Class rawType = Object.class;
         assertNull(EnumUtils.getEnumIgnoreCase(rawType, "rawType"));
     }
 
     @Test
-    public void testGetEnumIgnoreCase_nullClass() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.getEnumIgnoreCase((Class<Traffic>) null, "PURPLE"));
+    void testGetEnumIgnoreCase_nullClass() {
+        assertNullPointerException(() -> EnumUtils.getEnumIgnoreCase((Class<Traffic>) null, "PURPLE"));
     }
 
     @Test
-    public void testGetEnumList() {
+    void testGetEnumList() {
         final List<Traffic> test = EnumUtils.getEnumList(Traffic.class);
         assertEquals(3, test.size());
         assertEquals(Traffic.RED, test.get(0));
@@ -340,7 +347,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetEnumMap() {
+    void testGetEnumMap() {
         final Map<String, Traffic> test = EnumUtils.getEnumMap(Traffic.class);
         final Map<String, Traffic> expected = new HashMap<>();
         expected.put("RED", Traffic.RED);
@@ -358,7 +365,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetEnumMap_keyFunction() {
+    void testGetEnumMap_keyFunction() {
         final Map<Integer, Month> test = EnumUtils.getEnumMap(Month.class, Month::getId);
         final Map<Integer, Month> expected = new HashMap<>();
         expected.put(1, Month.JAN);
@@ -404,7 +411,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetEnumSystemProperty() {
+    void testGetEnumSystemProperty() {
         final String key = getClass().getName();
         System.setProperty(key, Traffic.RED.toString());
         try {
@@ -419,7 +426,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetFirstEnumIgnoreCase_defaultEnum() {
+    void testGetFirstEnumIgnoreCase_defaultEnum() {
         final Function<Traffic2, String> f = Traffic2::getLabel;
         assertEquals(Traffic2.RED, EnumUtils.getFirstEnumIgnoreCase(Traffic2.class, "***red***", f, Traffic2.AMBER));
         assertEquals(Traffic2.AMBER, EnumUtils.getFirstEnumIgnoreCase(Traffic2.class, "**Amber**", f, Traffic2.GREEN));
@@ -434,7 +441,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testGetFirstEnumToIntFunction() {
+    void testGetFirstEnumToIntFunction() {
         final ToIntFunction<Traffic2> f = Traffic2::getValue;
         assertEquals(Traffic2.RED, EnumUtils.getFirstEnum(Traffic2.class, 1, f, Traffic2.AMBER));
         assertEquals(Traffic2.AMBER, EnumUtils.getFirstEnum(Traffic2.class, 2, f, Traffic2.GREEN));
@@ -449,7 +456,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testIsValidEnum() {
+    void testIsValidEnum() {
         assertTrue(EnumUtils.isValidEnum(Traffic.class, "RED"));
         assertTrue(EnumUtils.isValidEnum(Traffic.class, "AMBER"));
         assertTrue(EnumUtils.isValidEnum(Traffic.class, "GREEN"));
@@ -458,12 +465,12 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testIsValidEnum_nullClass() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.isValidEnum(null, "PURPLE"));
+    void testIsValidEnum_nullClass() {
+        assertNullPointerException(() -> EnumUtils.isValidEnum(null, "PURPLE"));
     }
 
     @Test
-    public void testIsValidEnumIgnoreCase() {
+    void testIsValidEnumIgnoreCase() {
         assertTrue(EnumUtils.isValidEnumIgnoreCase(Traffic.class, "red"));
         assertTrue(EnumUtils.isValidEnumIgnoreCase(Traffic.class, "Amber"));
         assertTrue(EnumUtils.isValidEnumIgnoreCase(Traffic.class, "grEEn"));
@@ -472,12 +479,12 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testIsValidEnumIgnoreCase_nullClass() {
-        assertThrows(NullPointerException.class, () -> EnumUtils.isValidEnumIgnoreCase(null, "PURPLE"));
+    void testIsValidEnumIgnoreCase_nullClass() {
+        assertNullPointerException(() -> EnumUtils.isValidEnumIgnoreCase(null, "PURPLE"));
     }
 
     @Test
-    public void testProcessBitVector() {
+    void testProcessBitVector() {
         assertEquals(EnumSet.noneOf(Traffic.class), EnumUtils.processBitVector(Traffic.class, 0L));
         assertEquals(EnumSet.of(Traffic.RED), EnumUtils.processBitVector(Traffic.class, 1L));
         assertEquals(EnumSet.of(Traffic.AMBER), EnumUtils.processBitVector(Traffic.class, 2L));
@@ -496,18 +503,18 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testProcessBitVector_longClass() {
+    void testProcessBitVector_longClass() {
         assertThrows(IllegalArgumentException.class, () -> EnumUtils.processBitVector(TooMany.class, 0L));
     }
 
     @Test
-    public void testProcessBitVector_nullClass() {
+    void testProcessBitVector_nullClass() {
         final Class<Traffic> empty = null;
-        assertThrows(NullPointerException.class, () -> EnumUtils.processBitVector(empty, 0L));
+        assertNullPointerException(() -> EnumUtils.processBitVector(empty, 0L));
     }
 
     @Test
-    public void testProcessBitVectors() {
+    void testProcessBitVectors() {
         assertEquals(EnumSet.noneOf(Traffic.class), EnumUtils.processBitVectors(Traffic.class, 0L));
         assertEquals(EnumSet.of(Traffic.RED), EnumUtils.processBitVectors(Traffic.class, 1L));
         assertEquals(EnumSet.of(Traffic.AMBER), EnumUtils.processBitVectors(Traffic.class, 2L));
@@ -547,7 +554,7 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testProcessBitVectors_longClass() {
+    void testProcessBitVectors_longClass() {
         assertEquals(EnumSet.noneOf(TooMany.class), EnumUtils.processBitVectors(TooMany.class, 0L));
         assertEquals(EnumSet.of(TooMany.A), EnumUtils.processBitVectors(TooMany.class, 1L));
         assertEquals(EnumSet.of(TooMany.B), EnumUtils.processBitVectors(TooMany.class, 2L));
@@ -594,17 +601,11 @@ public class EnumUtilsTest extends AbstractLangTest {
     }
 
     @Test
-    public void testProcessBitVectors_nullClass() {
+    void testProcessBitVectors_nullClass() {
         final Class<Traffic> empty = null;
-        assertThrows(NullPointerException.class, () -> EnumUtils.processBitVectors(empty, 0L));
+        assertNullPointerException(() -> EnumUtils.processBitVectors(empty, 0L));
     }
 
-}
-
-enum Enum64 {
-    A00, A01, A02, A03, A04, A05, A06, A07, A08, A09, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22,
-    A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, A36, A37, A38, A39, A40, A41, A42, A43, A44, A45,
-    A46, A47, A48, A49, A50, A51, A52, A53, A54, A55, A56, A57, A58, A59, A60, A61, A62, A63
 }
 
 enum Month {
